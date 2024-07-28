@@ -25,6 +25,12 @@ app.prepare().then(() => {
     socket.on("disconnect", () => {
       console.log("유저가 퇴장했습니다.");
     });
+
+    socket.on("chat", (msg) => {
+      console.log("클라이언트에서 전송된 메세지입니다: ", msg);
+
+      io.emit("chat", msg);
+    });
   });
 
   httpServer
