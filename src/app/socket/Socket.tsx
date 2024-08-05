@@ -4,12 +4,15 @@ import { socket } from "@/socket";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { ChatLog } from "../model/socket";
 import ChatLogs from "../components/ChatLogs";
+import { useSetUserId } from "../store/user";
 
 export default function Socket() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [transport, setTransport] = useState("N/A");
   const [message, setMessage] = useState("");
   const [logs, setLogs] = useState<ChatLog[]>([]);
+
+  const setUserId = useSetUserId();
 
   useEffect(() => {
     const onConnect = () => {
@@ -21,6 +24,10 @@ export default function Socket() {
       });
 
       socket.emit("join", "관리자");
+
+      if (socket.id) {
+        setUserId(socket.id);
+      }
     };
 
     const onDisconnect = () => {

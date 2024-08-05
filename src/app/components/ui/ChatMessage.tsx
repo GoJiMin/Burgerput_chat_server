@@ -1,4 +1,5 @@
 import { ChatLog } from "@/app/model/socket";
+import { useUserId } from "@/app/store/user";
 
 type Props = {
   info: ChatLog;
@@ -7,5 +8,16 @@ type Props = {
 export default function ChatMessage({
   info: { author, currentUserId, message },
 }: Props) {
-  return <div>{message}</div>;
+  const userId = useUserId();
+
+  if (userId === currentUserId) {
+    return <p className="text-end">{message}</p>;
+  }
+
+  return (
+    <div>
+      <p>{author}</p>
+      <p>{message}</p>
+    </div>
+  );
 }
