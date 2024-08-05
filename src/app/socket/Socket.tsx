@@ -3,11 +3,18 @@
 import { socket } from "@/socket";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
+type ChatLog = {
+  type: "join" | "chat";
+  currentUserId?: string;
+  author?: string;
+  message: string;
+};
+
 export default function Socket() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [transport, setTransport] = useState("N/A");
   const [message, setMessage] = useState("");
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<ChatLog[]>([]);
 
   useEffect(() => {
     const onConnect = () => {
@@ -17,6 +24,8 @@ export default function Socket() {
       socket.io.engine.on("upgrade", (transport) => {
         setTransport(transport.name);
       });
+
+      socket.emit("join", "관리자");
     };
 
     const onDisconnect = () => {
@@ -26,8 +35,13 @@ export default function Socket() {
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
-    socket.on("chat", (msg) => {
-      setLogs((prev) => [...prev, msg]);
+
+    socket.on("join", (message) => {
+      setLogs((prev) => [...prev, { type: "join", message }]);
+    });
+
+    socket.on("chat", (chatData) => {
+      setLogs((prev) => [...prev, { type: "chat", ...chatData }]);
     });
 
     if (socket.connected) onConnect();
@@ -35,6 +49,7 @@ export default function Socket() {
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
+      socket.off("join");
       socket.off("chat");
     };
   }, []);
@@ -45,7 +60,11 @@ export default function Socket() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    socket.emit("chat", message);
+    socket.emit("chat", {
+      currentUserId: socket.id,
+      author: "관리자",
+      message,
+    });
     setMessage("");
   };
 
@@ -69,7 +88,13 @@ export default function Socket() {
           {logs &&
             logs.map((log, idx) => (
               <li key={idx}>
-                <p>{log}</p>
+                {log.type === "join" ? (
+                  <p>{log.message}</p>
+                ) : (
+                  <p>
+                    {log.author}: {log.message}
+                  </p>
+                )}
               </li>
             ))}
         </ul>

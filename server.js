@@ -20,8 +20,11 @@ app.prepare().then(() => {
   });
 
   io.on("connection", (socket) => {
-    console.log("사용자가 입장했습니다.");
+    socket.on("join", (user) => {
+      socket.broadcast.emit("join", `${user}님이 입장하셨습니다.`);
+    });
 
+    console.log("사용자가 입장했습니다.");
     socket.on("disconnect", () => {
       console.log("유저가 퇴장했습니다.");
     });
