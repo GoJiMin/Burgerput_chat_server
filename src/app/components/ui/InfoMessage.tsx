@@ -2,6 +2,6 @@ type Props = {
   message: string;
 };
 
-export default function JoinMessage({ message }: Props) {
+export default function InfoMessage({ message }: Props) {
   return <p>{message}</p>;
 }

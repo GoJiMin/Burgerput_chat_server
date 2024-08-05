@@ -1,5 +1,5 @@
 export type ChatLog = {
-  type: "join" | "chat";
+  type: "info" | "chat";
   currentUserId?: string;
   author?: string;
   message: string;

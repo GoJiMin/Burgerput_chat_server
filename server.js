@@ -20,19 +20,26 @@ app.prepare().then(() => {
   });
 
   io.on("connection", (socket) => {
-    socket.on("join", (user) => {
-      socket.broadcast.emit("join", `${user}님이 입장하셨습니다.`);
+    socket.on("joinAndLeave", ({ type, userName }) => {
+      const message =
+        type === "join"
+          ? `${userName}님이 입장하셨습니다.`
+          : `${userName}님이 퇴장하셨습니다.`;
+
+      socket.broadcast.emit("joinAndLeave", {
+        type: "info",
+        message,
+      });
     });
 
-    console.log("사용자가 입장했습니다.");
     socket.on("disconnect", () => {
       console.log("유저가 퇴장했습니다.");
     });
 
-    socket.on("chat", (msg) => {
-      console.log("클라이언트에서 전송된 메세지입니다: ", msg);
+    socket.on("chat", (chatInfo) => {
+      console.log("클라이언트에서 전송된 메세지입니다: ", chatInfo);
 
-      io.emit("chat", msg);
+      io.emit("chat", chatInfo);
     });
   });
 

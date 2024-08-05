@@ -23,7 +23,7 @@ export default function Socket() {
         setTransport(transport.name);
       });
 
-      socket.emit("join", "관리자");
+      socket.emit("joinAndLeave", { type: "join", userName: "관리자" });
 
       if (socket.id) {
         setUserId(socket.id);
@@ -35,11 +35,15 @@ export default function Socket() {
       setTransport("N/A");
     };
 
+    const handleBeforeUnload = () => {
+      socket.emit("joinAndLeave", { type: "leave", userName: "관리자" });
+    };
+
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
 
-    socket.on("join", (message) => {
-      setLogs((prev) => [...prev, { type: "join", message }]);
+    socket.on("joinAndLeave", (data) => {
+      setLogs((prev) => [...prev, { type: data.type, message: data.message }]);
     });
 
     socket.on("chat", (chatData) => {
@@ -48,10 +52,13 @@ export default function Socket() {
 
     if (socket.connected) onConnect();
 
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
-      socket.off("join");
+      socket.off("joinAndLeave");
       socket.off("chat");
     };
   }, []);
