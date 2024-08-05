@@ -2,13 +2,8 @@
 
 import { socket } from "@/socket";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-
-type ChatLog = {
-  type: "join" | "chat";
-  currentUserId?: string;
-  author?: string;
-  message: string;
-};
+import { ChatLog } from "../model/socket";
+import ChatLogs from "../components/ChatLogs";
 
 export default function Socket() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -83,22 +78,7 @@ export default function Socket() {
           <button>전송</button>
         </form>
       </article>
-      <article>
-        <ul>
-          {logs &&
-            logs.map((log, idx) => (
-              <li key={idx}>
-                {log.type === "join" ? (
-                  <p>{log.message}</p>
-                ) : (
-                  <p>
-                    {log.author}: {log.message}
-                  </p>
-                )}
-              </li>
-            ))}
-        </ul>
-      </article>
+      <ChatLogs logs={logs} />
     </section>
   );
 }
