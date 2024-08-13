@@ -16,6 +16,7 @@ echo "Burgerput Chat Server Deploy : $current_time" >> $DeployLogFile
 
 echo "Install Dependencies : $current_time" >> $DeployLogFile
 pnpm install >> $DeployLogFile 2>&1
+echo "" && echo "" >> $DeployLogFile 2>&1
 
 echo "Shut down an existing server : $current_time" >> $DeployLogFile
 pm2 delete $PROJECT_NAME >> $DeployLogFile 2>&1
