@@ -5,9 +5,9 @@ DeployLogFile="/home/ubuntu/deploy/log/DeployLogFile.log"
 PROJECT_NAME="Burgerput_Chat_Server"
 current_time=$(date "+%Y-%m-%d %H:%M:%S")
 
-echo "Burgerput Chat Server Deploy : $current_time" >> $DeployLogFile
-
 cd $PROJECT_ROOT
+
+echo "Burgerput Chat Server Deploy : $current_time" >> $DeployLogFile
 
 echo "Install Dependencies : $current_time" >> $DeployLogFile
 pnpm install
