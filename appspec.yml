@@ -5,15 +5,15 @@ files:
   - source: /
     destination: "/home/ubuntu/deploy"
     overwrite: yes
-    runas: ubuntu
 
 permissions:
   - object: /home/ubuntu/deploy
-    patter: "**"
     owner: ubuntu
     group: ubuntu
+    mode: 755
 
 hooks:
   AfterInstall:
-    - location: ./scripts/deploy.sh
+    - location: scripts/deploy.sh
       timeout: 240
+      runas: ubuntu
