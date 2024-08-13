@@ -4,6 +4,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
+sudo chown -R ubuntu:ubuntu /home/ubuntu/deploy
+
 PROJECT_ROOT="/home/ubuntu/deploy"
 PROJECT_NAME="Burgerput_Chat_Server"
 
