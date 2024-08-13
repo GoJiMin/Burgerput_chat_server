@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_ROOT="/home/ubuntu/deploy"
-DeployLogFile="/home/ubuntu/deploy/log/DeployLogFile.log"
+DeployLogFile="/home/ubuntu/log/DeployLogFile.log"
 PROJECT_NAME="Burgerput_Chat_Server"
 current_time=$(date "+%Y-%m-%d %H:%M:%S")
 
