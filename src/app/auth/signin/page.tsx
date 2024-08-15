@@ -27,7 +27,7 @@ export default function SignPage() {
     signIn("credentials", {
       id,
       password,
-      callbackUrl: "http://localhost:8080",
+      callbackUrl: process.env.NEXT_PUBLIC_URL,
     });
   };
 
@@ -56,7 +56,7 @@ export default function SignPage() {
           onChange={handleChange}
           placeholder="비밀번호를 입력해주세요."
         />
-        <button className="bg-orange-500 text-white w-full text-md md:text-lg p-2.5 rounded-md font-semibold">
+        <button className="bg-orange-500 text-white w-full mtext-lg p-2.5 rounded-md font-semibold">
           로그인
         </button>
       </form>
