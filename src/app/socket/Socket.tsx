@@ -5,6 +5,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { ChatLog } from "../model/socket";
 import ChatLogs from "../components/ChatLogs";
 import { useSetUserId } from "../store/user";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Socket() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -77,8 +78,16 @@ export default function Socket() {
     setMessage("");
   };
 
+  const { data: session } = useSession();
+
   return (
     <section>
+      {session ? (
+        <button onClick={() => signOut()}>로그아웃</button>
+      ) : (
+        <button onClick={() => signIn()}>로그인</button>
+      )}
+
       <article>
         <p>Status: {isConnected ? "connected" : "disconnected"} </p>
         <p>Transport: {transport}</p>
