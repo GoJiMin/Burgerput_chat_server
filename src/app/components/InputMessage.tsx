@@ -24,7 +24,7 @@ export default function InputMessage() {
   return (
     <form className="w-full flex items-center" onSubmit={handleSubmit}>
       <input
-        className="text-black flex-1 px-[12px] py-[14px] text-[14px] border-none outline-none"
+        className="text-black flex-1 px-[12px] py-[14px] text-[16px] border-none outline-none"
         type="text"
         value={message}
         autoFocus
