@@ -1,6 +1,7 @@
 import "./globals.css";
 import localFont from "next/font/local";
 import AuthContextProvider from "./context/AuthContextProvider";
+import Head from "next/head";
 
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
@@ -14,10 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={pretendard.className}>
-      <meta
-        name="viewport"
-        content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
-      />
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+        />
+      </Head>
       <body className="w-full h-full flex justify-center items-center bg-slate-600">
         <AuthContextProvider>{children}</AuthContextProvider>
       </body>
