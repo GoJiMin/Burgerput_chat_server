@@ -32,7 +32,7 @@ export default function SignPage() {
   };
 
   return (
-    <section className="h-full flex flex-col justify-center items-center">
+    <section className="w-full h-full flex flex-col justify-center items-center bg-white">
       <SiBurgerking className="mb-[50px] text-[140px] md:text-[170px] text-orange-500" />
       <form
         className="min-w-[270px] md:min-w-[320px] flex flex-col gap-5"
