@@ -11,12 +11,18 @@ export default function ChatMessage({
   const userId = useUserId();
 
   if (userId === currentUserId) {
-    return <p className="text-end">{message}</p>;
+    return (
+      <div className="flex justify-end">
+        <p className="py-[6px] pl-[10px] pr-[8px] rounded-md bg-slate-500 max-w-[300px]">
+          {message}
+        </p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <p>{author}</p>
+    <div className="bg-slate-500 w-fit py-[6px] pl-[8px] pr-[10px] rounded-md max-w-[300px]">
+      <p className="text-[12px] mb-[4px]">{author}</p>
       <p>{message}</p>
     </div>
   );

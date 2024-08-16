@@ -3,5 +3,5 @@ type Props = {
 };
 
 export default function InfoMessage({ message }: Props) {
-  return <p>{message}</p>;
+  return <p className="text-center text-[14px] text-black">{message}</p>;
 }

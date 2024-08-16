@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={pretendard.className}>
-      <body className="w-full h-full">
+      <body className="w-full h-full flex justify-center items-center bg-slate-600">
         <AuthContextProvider>{children}</AuthContextProvider>
       </body>
     </html>
