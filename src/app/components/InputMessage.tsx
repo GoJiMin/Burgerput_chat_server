@@ -12,6 +12,10 @@ export default function InputMessage() {
   };
 
   const handleSubmit = (e: FormEvent) => {
+    if (message.length === 0) {
+      return;
+    }
+
     e.preventDefault();
     socket.emit("chat", {
       currentUserId: socket.id,

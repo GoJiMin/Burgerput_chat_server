@@ -20,7 +20,16 @@ export default function ChatLogs({ logs }: Props) {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (scrollRef.current) {
+      const hasOverflow =
+        scrollRef.current.scrollHeight > scrollRef.current.clientHeight;
+
+      if (hasOverflow) {
+        scrollToBottom();
+      } else {
+        scrollRef.current.scrollTo({ top: 0 });
+      }
+    }
   }, [logs]);
 
   return (
