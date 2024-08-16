@@ -2,6 +2,7 @@
 
 import { socket } from "@/socket";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { BsSendFill } from "react-icons/bs";
 
 export default function InputMessage() {
   const [message, setMessage] = useState("");
@@ -21,14 +22,18 @@ export default function InputMessage() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="w-full flex items-center" onSubmit={handleSubmit}>
       <input
-        className="text-black"
+        className="text-black flex-1 px-[12px] py-[14px] text-[14px] border-none outline-none"
         type="text"
         value={message}
+        autoFocus
+        placeholder="메세지를 입력해주세요."
         onChange={handleChange}
       />
-      <button>전송</button>
+      <button className="text-[24px] p-[14px] flex items-center bg-slate-500 text-white">
+        <BsSendFill />
+      </button>
     </form>
   );
 }
