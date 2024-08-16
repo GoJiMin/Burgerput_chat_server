@@ -2,10 +2,9 @@
 
 import { socket } from "@/socket";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { ChatLog } from "../model/socket";
+import { ChatLog, infoMessae } from "../model/socket";
 import ChatLogs from "../components/ChatLogs";
 import { useSetUserId } from "../store/user";
-import { signIn, signOut, useSession } from "next-auth/react";
 
 export default function Socket() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -24,7 +23,7 @@ export default function Socket() {
         setTransport(transport.name);
       });
 
-      socket.emit("joinAndLeave", { type: "join", userName: "관리자" });
+      socket.emit("join", "관리자");
 
       if (socket.id) {
         setUserId(socket.id);
@@ -36,16 +35,15 @@ export default function Socket() {
       setTransport("N/A");
     };
 
-    const handleBeforeUnload = () => {
-      socket.emit("joinAndLeave", { type: "leave", userName: "관리자" });
+    const handleSetInfoLogs = (data: infoMessae) => {
+      setLogs((prev) => [...prev, { type: data.type, message: data.message }]);
     };
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
 
-    socket.on("joinAndLeave", (data) => {
-      setLogs((prev) => [...prev, { type: data.type, message: data.message }]);
-    });
+    socket.on("join", (data) => handleSetInfoLogs(data));
+    socket.on("leave", (data) => handleSetInfoLogs(data));
 
     socket.on("chat", (chatData) => {
       setLogs((prev) => [...prev, { type: "chat", ...chatData }]);
@@ -53,14 +51,12 @@ export default function Socket() {
 
     if (socket.connected) onConnect();
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
-      socket.off("joinAndLeave");
       socket.off("chat");
+      socket.off("join");
+      socket.off("leave");
     };
   }, []);
 
@@ -78,16 +74,8 @@ export default function Socket() {
     setMessage("");
   };
 
-  const { data: session } = useSession();
-
   return (
     <section>
-      {session ? (
-        <button onClick={() => signOut()}>로그아웃</button>
-      ) : (
-        <button onClick={() => signIn()}>로그인</button>
-      )}
-
       <article>
         <p>Status: {isConnected ? "connected" : "disconnected"} </p>
         <p>Transport: {transport}</p>

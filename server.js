@@ -9,6 +9,8 @@ const port = 8080;
 const app = next({ dev, hostname, port });
 const handler = app.getRequestHandler();
 
+const userList = new Map();
+
 app.prepare().then(() => {
   const httpServer = createServer(handler);
 
@@ -20,26 +22,29 @@ app.prepare().then(() => {
   });
 
   io.on("connection", (socket) => {
-    socket.on("joinAndLeave", ({ type, userName }) => {
-      const message =
-        type === "join"
-          ? `${userName}님이 입장하셨습니다.`
-          : `${userName}님이 퇴장하셨습니다.`;
+    socket.on("join", (userName) => {
+      const message = `${userName}님이 입장하셨습니다.`;
 
-      socket.broadcast.emit("joinAndLeave", {
-        type: "info",
-        message,
-      });
-    });
+      userList.set(socket.id, userName);
 
-    socket.on("disconnect", () => {
-      console.log("유저가 퇴장했습니다.");
+      socket.broadcast.emit("join", { type: "info", message });
     });
 
     socket.on("chat", (chatInfo) => {
       console.log("클라이언트에서 전송된 메세지입니다: ", chatInfo);
 
       io.emit("chat", chatInfo);
+    });
+
+    socket.on("disconnect", () => {
+      const user = userList.get(socket.id);
+      userList.delete(socket.id);
+
+      const message = `${user}님이 퇴장했습니다.`;
+
+      console.log(message);
+
+      io.emit("leave", { type: "info", message });
     });
   });
 

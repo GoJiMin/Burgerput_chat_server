@@ -4,3 +4,8 @@ export type ChatLog = {
   author?: string;
   message: string;
 };
+
+export type infoMessae = {
+  type: "info";
+  message: string;
+};
