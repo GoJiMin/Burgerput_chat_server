@@ -14,6 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={pretendard.className}>
+      <meta
+        name="viewport"
+        content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"
+      />
       <body className="w-full h-full flex justify-center items-center bg-slate-600">
         <AuthContextProvider>{children}</AuthContextProvider>
       </body>
