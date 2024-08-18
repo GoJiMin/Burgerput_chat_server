@@ -2,11 +2,20 @@ import "./globals.css";
 import localFont from "next/font/local";
 import AuthContextProvider from "./context/AuthContextProvider";
 import Head from "next/head";
+import { Metadata } from "next";
 
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
   display: "swap",
 });
+
+export const metadata: Metadata = {
+  title: "BurgerChat",
+  description: "버거풋 상담실",
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
 
 export default function RootLayout({
   children,
