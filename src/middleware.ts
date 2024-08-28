@@ -1,7 +1,12 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-const allowedOrigins = ["http://localhost:8080", "http://localhost:3000"];
+const allowedOrigins = [
+  "http://localhost:8080",
+  "http://localhost:3000",
+  process.env.BURGERPUT_SITE_1,
+  process.env.BURGERPUT_SITE_2,
+];
 
 const corsOptions = {
   "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",

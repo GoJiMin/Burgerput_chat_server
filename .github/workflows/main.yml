@@ -15,6 +15,11 @@ env:
   NEXT_PUBLIC_URL: ${{ secrets.NEXT_PUBLIC_URL }}
   ADMIN_ID: ${{ secrets.ADMIN_ID }}
   ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+  NAVER_EMAIL: ${{ secrets.NAVER_EMAIL }}
+  NAVER_PASS: ${{ secrets.NAVER_PASS }}
+  GMAIL_ID: ${{ secrets.GMAIL_ID }}
+  BURGERPUT_SITE_1: ${{ secrets.BURGERPUT_SITE_1 }}
+  BURGERPUT_SITE_2: ${{ secrets.BURGERPUT_SITE_2 }}
 
 jobs:
   build:
@@ -37,6 +42,11 @@ jobs:
           echo "NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}" >> .env 
           echo "ADMIN_ID=${ADMIN_ID}" >> .env 
           echo "ADMIN_PASSWORD=${ADMIN_PASSWORD}" >> .env
+          echo "NAVER_EMAIL=${NAVER_EMAIL}" >> .env
+          echo "NAVER_PASS=${NAVER_PASS}" >> .env
+          echo "GMAIL_ID=${GMAIL_ID}" >> .env
+          echo "BURGERPUT_SITE_1=${BURGERPUT_SITE_1}" >> .env
+          echo "BURGERPUT_SITE_2=${BURGERPUT_SITE_2}" >> .env
 
       - name: Build with pnpm
         run: pnpm run build
