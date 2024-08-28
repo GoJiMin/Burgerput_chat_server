@@ -16,7 +16,11 @@ app.prepare().then(() => {
 
   const io = new Server(httpServer, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: [
+        process.env.BURGERPUT_SITE_1,
+        process.env.BURGERPUT_SITE_2,
+        "http://localhost:3000",
+      ],
       methods: ["GET", "POST"],
     },
   });
