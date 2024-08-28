@@ -1,16 +1,49 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req });
+const allowedOrigins = ["http://localhost:8080", "http://localhost:3000"];
 
-  if (!token) {
-    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/auth/signin`);
+const corsOptions = {
+  "Access-Control-Allow-Methods": "GET, HEAD, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function middleware(req: NextRequest) {
+  if (req.nextUrl.pathname === "/") {
+    const token = await getToken({ req });
+
+    if (!token) {
+      return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/auth/signin`);
+    }
+
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
-}
+  if (req.nextUrl.pathname.startsWith("/api/entrance")) {
+    const origin = req.headers.get("origin") ?? "";
+    const isAllowedOrigin = allowedOrigins.includes(origin);
 
-export const config = {
-  matcher: ["/"],
-};
+    const isPreflight = req.method === "OPTIONS";
+
+    if (isPreflight) {
+      const preflightHeaders = {
+        ...(isAllowedOrigin && { "Access-Control-Allow-Origin": origin }),
+        ...corsOptions,
+      };
+
+      return NextResponse.json({}, { headers: preflightHeaders });
+    }
+
+    const res = NextResponse.next();
+
+    if (isAllowedOrigin) {
+      res.headers.set("Access-Control-Allow-Origin", origin);
+    }
+
+    Object.entries(corsOptions).forEach(([key, value]) => {
+      res.headers.set(key, value);
+    });
+
+    return res;
+  }
+}
