@@ -27,13 +27,6 @@ export async function middleware(req: NextRequest) {
   const origin = req.headers.get("origin") ?? "";
   const isAllowedOrigin = allowedOrigins.includes(origin);
 
-  console.log(origin, isAllowedOrigin);
-  console.log("----------------------");
-
-  allowedOrigins.forEach((origin) => {
-    console.log(origin);
-  });
-
   const isPreflight = req.method === "OPTIONS";
 
   if (isPreflight) {
