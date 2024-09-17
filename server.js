@@ -25,31 +25,38 @@ app.prepare().then(() => {
     },
   });
 
-  io.on("connection", (socket) => {
-    socket.on("join", (userName) => {
-      const message = `${userName}님이 입장하셨습니다.`;
+  const handleJoin = (socket, userName) => {
+    const message = `${userName}님이 입장하셨습니다.`;
 
-      userList.set(socket.id, userName);
+    userList.set(socket.id, userName);
 
-      socket.broadcast.emit("join", { type: "info", message });
-    });
+    socket.broadcast.emit("join", { type: "info", message });
+  };
 
-    socket.on("chat", (chatInfo) => {
-      console.log("클라이언트에서 전송된 메세지입니다: ", chatInfo);
+  const handleChat = (chatInfo) => {
+    io.emit("chat", chatInfo);
+  };
 
-      io.emit("chat", chatInfo);
-    });
+  const handleDisconnect = (socket) => {
+    const user = userList.get(socket.id);
 
-    socket.on("disconnect", () => {
-      const user = userList.get(socket.id);
+    if (user) {
       userList.delete(socket.id);
 
       const message = `${user}님이 퇴장했습니다.`;
 
-      console.log(message);
-
       io.emit("leave", { type: "info", message });
-    });
+    } else {
+      console.error(`소켓 ID: ${socket.id}가 userList에 존재하지 않습니다.`);
+    }
+  };
+
+  io.on("connection", (socket) => {
+    socket.on("join", (userName) => handleJoin(socket, userName));
+
+    socket.on("chat", handleChat);
+
+    socket.on("disconnect", () => handleDisconnect(socket));
   });
 
   httpServer
